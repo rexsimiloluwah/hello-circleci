@@ -17,7 +17,9 @@ jobs:
 
 # The workflow section
 workflows:
-  - print_hello 
-  - print_world: 
-      requires: 
-        - print_hello
+  welcome:
+    jobs:
+      - print_hello 
+      - print_world: 
+          requires: 
+            - print_hello
