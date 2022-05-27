@@ -27,7 +27,16 @@ jobs:
 
   # Using environment variable scopes 
   # Environment variables can be defined by us or bound to a CircleCI scope 
-  # Organization-level, Project-level, Pipeline-level, Job-level scopes, Step scope
+  # Organization-level, Project-level, Pipeline-level, Job-level scopes, Step-level scope
+  # CircleCI also provides built-in environment variables
+  print_environment_variables_example:
+    docker: 
+      - image: cimg/base:2020.01
+    steps: 
+      - run: 
+          name: "A simple step to print the environment variable available at the project-level scope."
+          command: |
+            echo $NAME
 
 # The workflow section
 workflows:
@@ -38,3 +47,4 @@ workflows:
           requires: 
             - print_hello
       - print_pipeline_values
+      - print_environment_variables
