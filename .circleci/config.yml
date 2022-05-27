@@ -25,6 +25,10 @@ jobs:
       - run: echo "This is the pipeline id - << pipeline.id >>"
       - run: echo $CIRCLECI_COMPARE_URL
 
+  # Using environment variable scopes 
+  # Environment variables can be defined by us or bound to a CircleCI scope 
+  # Organization-level, Project-level, Pipeline-level, Job-level scopes, Step scope
+
 # The workflow section
 workflows:
   welcome:
@@ -33,3 +37,4 @@ workflows:
       - print_world: 
           requires: 
             - print_hello
+      - print_pipeline_values
