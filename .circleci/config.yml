@@ -75,6 +75,21 @@ jobs:
       - image: circleci/node:13.8.0
     steps: 
       - print_pipeline_id
+
+  # handling failures example 
+  handle_failure_example: 
+    docker: 
+      - image: circleci/node:13.8.0 
+    steps: 
+      - run: 
+          name: failing_step 
+          command: echo Failing Step && return 1 
+          shell: /bin/bash 
+
+      - run: 
+          name: failure_handler 
+          command: echo Failed step handled 
+          when: on_fail  # run only when the job fails (Use case: uploading failed requests)
       
 
 # The workflow section
@@ -92,4 +107,5 @@ workflows:
           requires: 
             - save_hello_world_output
       - print_pipeline_id_from_command
+      - handle_failure_example
 
