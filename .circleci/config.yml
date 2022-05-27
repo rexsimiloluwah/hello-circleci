@@ -91,4 +91,5 @@ workflows:
       - print_hello_world_output_content:
           requires: 
             - save_hello_world_output
+      - print_pipeline_id_from_command
 
