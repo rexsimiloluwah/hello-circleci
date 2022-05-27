@@ -38,6 +38,30 @@ jobs:
           command: |
             echo $NAME
 
+  # Sharing file / inter-job communication 
+  # Files can be shared using: Cache (via a key-value store), Workspaces, or third-party services (Secret keepers)
+  # Exercise: shared_environment_variables_example
+  save_hello_world_output: 
+    docker: 
+      - image: circleci/node:13.8.0
+    steps: 
+      - run: echo "Hello World!" > ~/output.txt 
+
+      # persist the output.txt file for use in a downstream job 
+      - persist_to_workspace:
+          root: ~/
+          paths: 
+            - output.txt
+
+  # the downstream job
+  print_hello_world_output_content: 
+    docker: 
+      - image: circleci/node:13.8.0 
+    steps: 
+      - attach_workspace:
+          at: ~/ 
+      - run: cat ~/output.txt
+
 # The workflow section
 workflows:
   welcome:
@@ -48,3 +72,8 @@ workflows:
             - print_hello
       - print_pipeline_values
       - print_environment_variables_example
+      - save_hello_world_output
+      - print_hello_world_output_content:
+          requires: 
+            - save_hello_world_output
+
