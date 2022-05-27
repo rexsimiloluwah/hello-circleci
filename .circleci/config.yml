@@ -76,14 +76,14 @@ jobs:
     steps: 
       - print_pipeline_id
 
-  # handling failures example 
+  # handling job failures example 
   handle_failure_example: 
     docker: 
       - image: circleci/node:13.8.0 
     steps: 
       - run: 
           name: failing_step 
-          command: echo Failing Step && return 1 
+          command: echo Failing Step && exit 1 
           shell: /bin/bash 
 
       - run: 
