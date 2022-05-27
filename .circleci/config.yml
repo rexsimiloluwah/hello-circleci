@@ -47,4 +47,4 @@ workflows:
           requires: 
             - print_hello
       - print_pipeline_values
-      - print_environment_variables
+      - print_environment_variables_example
