@@ -1,6 +1,13 @@
 # Use version 2.1 of the CircleCI pipeline process engine
 version: 2.1
 
+# commands 
+commands:
+  print_pipeline_id: 
+    description: "This command prints out the pipeline ID."
+    steps: 
+      - run: echo ${CIRCLE_WORKFLOW_ID}
+
 # The collection of jobs containing the steps
 jobs: 
   print_hello:
@@ -61,6 +68,14 @@ jobs:
       - attach_workspace:
           at: ~/ 
       - run: cat ~/output.txt
+
+  # commands example 
+  print_pipeline_id_from_command:
+    docker: 
+      - image: circleci/node:13.8.0
+    steps: 
+      - print_pipeline_id
+      
 
 # The workflow section
 workflows:
