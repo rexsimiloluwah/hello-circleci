@@ -25,13 +25,13 @@ jobs:
     steps: 
       - checkout  #checkout the repo to the CircleCI container
       - add_ssh_keys:
-          fingerprints: ["7e:46:fd:57:02:2d:b3:0a:bb:df:ef:60:57:58:45:b5"]
+          fingerprints: ["42:66:02:34:cd:b4:5d:90:3b:a2:1d:d6:78:09:a5:84"]
       # Install Ansible
       - run: 
           name: Dump 
           command: | 
             ls ~/.ssh
-            cat ~/.ssh/id_rsa_7e46fd57022db30abbdfef60575845b5
+            cat ~/.ssh/id_rsa_42660234cdb45d903ba21dd67809a584
       - run: 
           name: Install Ansible 
           command: | 
@@ -41,7 +41,7 @@ jobs:
       - run: 
           name: Run Playbook and Configure Server 
           command: | 
-            ansible-playbook -i ./ansible/inventory.txt ./ansible/main.yml
+            ansible-playbook -i ./ansible/inventory.txt --key-file ~/.ssh/id_rsa_42660234cdb45d903ba21dd67809a584 ./ansible/main.yml 
 
 workflows:
   my_workflow: 
