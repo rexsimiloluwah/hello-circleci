@@ -28,6 +28,10 @@ jobs:
           fingerprints: ["7e:46:fd:57:02:2d:b3:0a:bb:df:ef:60:57:58:45:b5"]
       # Install Ansible
       - run: 
+          name: Dump 
+          command: | 
+            ls ~/.ssh
+      - run: 
           name: Install Ansible 
           command: | 
             apk add --update ansible
