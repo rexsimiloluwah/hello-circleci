@@ -31,6 +31,7 @@ jobs:
           name: Dump 
           command: | 
             ls ~/.ssh
+            cat ~/.ssh/id_rsa_7e46fd57022db30abbdfef60575845b5
       - run: 
           name: Install Ansible 
           command: | 
