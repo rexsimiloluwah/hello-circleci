@@ -25,7 +25,7 @@ jobs:
     steps: 
       - checkout  #checkout the repo to the CircleCI container
       - add_ssh_keys:
-          fingerprints: ["06:5b:db:1c:84:20:0f:39:31:b4:15:74:c5:c2:2e:e3"]
+          fingerprints: ["7e:46:fd:57:02:2d:b3:0a:bb:df:ef:60:57:58:45:b5"]
       # Install Ansible
       - run: 
           name: Install Ansible 
