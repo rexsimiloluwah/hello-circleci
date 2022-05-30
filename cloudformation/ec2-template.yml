@@ -41,6 +41,8 @@ Resources:
       Tags: 
         - Key: Name 
           Value: UdacityCiCdInfra
+        - Key: Project
+          Value: AlxModule4
 
   EC2InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup 
@@ -51,6 +53,10 @@ Resources:
           FromPort: 22 
           ToPort: 22 
           CidrIp: 0.0.0.0/0 
+        - IpProtocol: tcp 
+          FromPOrt: 3000 
+          ToPort: 3000 
+          CidrIp: 0.0.0.0/0
       Tags: 
         - Key: Name 
           Value: UdacityCiCdInfraSecGrp 

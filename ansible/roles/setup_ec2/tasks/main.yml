@@ -1,0 +1,51 @@
+---
+# Playbook keywords documentation: https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html
+# APT module documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+- name: Update apt packages
+  become: true 
+  apt: 
+    update_cache: yes 
+
+- name: Upgrade apt packages
+  become: true
+  apt: 
+    upgrade: yes 
+
+- name: Remove unused dependencies
+  become: true 
+  apt: 
+    autoremove: yes 
+
+# Install dependencies for running the Node.js server i.e. node, npm
+- name: Install dependencies
+  become: true 
+  apt: 
+    name: ["nodejs","npm"]
+    state: latest 
+    update_cache: yes 
+
+# Install pm2 - a production process manager for Node.js with a built-in load balancer (using npm)
+- name: Install pm2 
+  become: true 
+  npm: 
+    name: pm2 
+    global: yes 
+    production: yes 
+    state: present 
+
+# Create the output directory for the server file 
+- name: Create server directory 
+  file: 
+    path: ~/server 
+    state: directory 
+
+# Copy the index.js test page to the server directory 
+- name: Copy files to the server directory 
+  template: 
+    src: files/index.js
+    dest: ~/server/index.js 
+
+# Executing the server using pm2 
+- name: Executing the server 
+  shell: |
+    pm2 start ~/server/index.js -f
