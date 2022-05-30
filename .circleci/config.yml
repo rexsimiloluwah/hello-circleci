@@ -13,10 +13,10 @@ jobs:
           command: | 
             aws cloudformation create-stack --stack-name infraCiCdStack-${CIRCLE_WORKFLOW_ID:0:5} --template-body file://cloudformation/ec2-template.yml --parameters file://cloudformation/ec2-parameters.json
 
-      - run: 
-          name: Fetch EC2 instance public IP address 
-          command: | 
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=AlxModule4" --output text
+      # - run: 
+      #     name: Fetch EC2 instance public IP address 
+      #     command: | 
+      #       aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=AlxModule4" --output text
 
   # Configure Infrastructure using Ansible 
   configure_infrastructure: 
@@ -43,7 +43,5 @@ workflows:
   my_workflow: 
     jobs: 
       - create_infrastructure
-      # - configure_infrastructure:
-      #     requires:
-      #       - create_infrastructure
+      - configure_infrastructure
 
