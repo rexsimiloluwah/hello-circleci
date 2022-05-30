@@ -16,10 +16,7 @@ jobs:
       - run: 
           name: Fetch EC2 instance public IP address 
           command: | 
-            aws ec2 describe-instances \ 
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Project,Values=AlxModule4" \
-              --output text
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=AlxModule4" --output text
 
   # Configure Infrastructure using Ansible 
   configure_infrastructure: 
