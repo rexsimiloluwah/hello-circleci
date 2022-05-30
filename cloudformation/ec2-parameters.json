@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey":"EnvironmentName",
+        "ParameterValue":"CiCdUdacity"
+    },
+    {
+        "ParameterKey":"InstanceType",
+        "ParameterValue":"t2.micro"
+    },
+    {
+        "ParameterKey":"AmiId",
+        "ParameterValue":"ami-09d56f8956ab235b3"
+    },
+    {
+        "ParameterKey":"KeyPairName",
+        "ParameterValue":"theblackdove3"
+    }
+]

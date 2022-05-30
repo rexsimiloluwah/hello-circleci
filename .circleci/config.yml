@@ -1,111 +1,24 @@
 # Use version 2.1 of the CircleCI pipeline process engine
 version: 2.1
 
-# commands 
-commands:
-  print_pipeline_id: 
-    description: "This command prints out the pipeline ID."
-    steps: 
-      - run: echo ${CIRCLE_WORKFLOW_ID}
-
-# The collection of jobs containing the steps
 jobs: 
-  print_hello:
+  create_infrastructure: 
     docker: 
-      - image: circleci/node:13.8.0
-    steps: 
-      - run: echo hello
+      - image: amazon/aws-cli 
 
-  print_world:
-    docker: 
-      - image: circleci/node:13.8.0
     steps: 
-      - run: echo world
-
-  # Pipeline values 
-  print_pipeline_values: 
-    docker: 
-      - image: circleci/node:latest 
-    environment: 
-      CIRCLECI_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps: 
-      - run: echo "This is the pipeline id - << pipeline.id >>"
-      - run: echo $CIRCLECI_COMPARE_URL
-
-  # Using environment variable scopes 
-  # Environment variables can be defined by us or bound to a CircleCI scope 
-  # Organization-level, Project-level, Pipeline-level, Job-level scopes, Step-level scope
-  # CircleCI also provides built-in environment variables
-  print_environment_variables_example:
-    docker: 
-      - image: cimg/base:2020.01
-    steps: 
+      - checkout 
       - run: 
-          name: "A simple step to print the environment variable available at the project-level scope."
-          command: |
-            echo $NAME
-
-  # Sharing file / inter-job communication 
-  # Files can be shared using: Cache (via a key-value store), Workspaces, or third-party services (Secret keepers)
-  # Exercise: shared_environment_variables_example
-  save_hello_world_output: 
-    docker: 
-      - image: circleci/node:13.8.0
-    steps: 
-      - run: echo "Hello World!" > ~/output.txt 
-
-      # persist the output.txt file for use in a downstream job 
-      - persist_to_workspace:
-          root: ~/
-          paths: 
-            - output.txt
-
-  # the downstream job
-  print_hello_world_output_content: 
-    docker: 
-      - image: circleci/node:13.8.0 
-    steps: 
-      - attach_workspace:
-          at: ~/ 
-      - run: cat ~/output.txt
-
-  # commands example 
-  print_pipeline_id_from_command:
-    docker: 
-      - image: circleci/node:13.8.0
-    steps: 
-      - print_pipeline_id
-
-  # handling job failures example 
-  handle_failure_example: 
-    docker: 
-      - image: circleci/node:13.8.0 
-    steps: 
-      - run: 
-          name: failing_step 
-          command: echo Failing Step && exit 1 
-          shell: /bin/bash 
-
-      - run: 
-          name: failure_handler 
-          command: echo Failed step handled 
-          when: on_fail  # run only when the job fails (Use case: uploading failed requests)
-      
-
-# The workflow section
+          name: Create Cloudformation Stack 
+          command: | 
+            aws cloudformation create-stack \ 
+              --template-body file://cloudformation/ec2-template.yml \ 
+              --parameters file://cloudformation/ec2-parameters.json \
+              --stack-name infraCiCdStack-${CIRCLE_WORKFLOW_ID:0:5} \ 
+              --region us-east-1
+              
 workflows:
-  welcome:
-    jobs:
-      - print_hello 
-      - print_world: 
-          requires: 
-            - print_hello
-      - print_pipeline_values
-      - print_environment_variables_example
-      - save_hello_world_output
-      - print_hello_world_output_content:
-          requires: 
-            - save_hello_world_output
-      - print_pipeline_id_from_command
-      - handle_failure_example
+  my_workflow: 
+    jobs: 
+      - create_infrastructure
 
