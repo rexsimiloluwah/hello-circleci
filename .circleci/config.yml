@@ -12,11 +12,11 @@ jobs:
           name: Create Cloudformation Stack 
           command: | 
             aws cloudformation create-stack \ 
+              --stack-name infraCiCdStack-${CIRCLE_WORKFLOW_ID:0:5} \ 
               --template-body file://cloudformation/ec2-template.yml \ 
               --parameters file://cloudformation/ec2-parameters.json \
-              --stack-name infraCiCdStack-${CIRCLE_WORKFLOW_ID:0:5} \ 
               --region us-east-1
-              
+
 workflows:
   my_workflow: 
     jobs: 
