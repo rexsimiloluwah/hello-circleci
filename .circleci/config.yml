@@ -98,10 +98,10 @@ jobs:
       - run: 
           name: Deploy an S3 bucket - from the Cloudformation stack
           command: | 
-            aws cloudformation deploy \ 
-            --template-file cloudformation/create-bucket-template.yml \
+            aws cloudformation create-stack \ 
             --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
-            --parameter-overrides mybucket-4227-${CIRCLECI_WORKFLOW_ID:0:7}
+            --template-body file://cloudformation/create-bucket-template.yml \
+            --parameters ParameterKey=MyBucketName,ParameterValue=mybucket-4227-${CIRCLECI_WORKFLOW_ID:0:7}
       - run: 
           name: Upload the contents of the `s3-files` folder 
           command: | 
@@ -137,10 +137,10 @@ jobs:
       - run: 
           name: Create CloudFront Distribution 
           command: | 
-            aws cloudformation deploy \
-            --template-file cloudformation/create-cloudfront-template.yml \
+            aws cloudformation create-stack \
             --stack-name production-distro-main \
-            --parameter-overrides PipelineID="mybucket-4227-${CIRCLECI_WORKFLOW_ID:0:7}"
+            --template-body file://cloudformation/create-cloudfront-template.yml \
+            --parameters ParameterKey=PipelineID,ParameterValue=mybucket-4227-${CIRCLECI_WORKFLOW_ID:0:7}
 
   # Destroy the previous production version's S3 bucket and cloudformation stack 
   clean_up_old_frontend: 
