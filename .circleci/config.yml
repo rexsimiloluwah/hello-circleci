@@ -4,6 +4,9 @@ version: 2.1
 commands:
   # Reusable command for destroying cloudformation stack (ROllback example)
   destroy_environment: 
+    docker: 
+      - image: amazon/aws-cli 
+      
     steps: 
       - run: 
           name: Destroy environment 
@@ -95,5 +98,7 @@ workflows:
       # - create_infrastructure
       # - configure_infrastructure
       - create_infrastructure 
-      - smoke_test_rollback
+      - smoke_test_rollback:
+          requires:
+            - create_infrastructure
 
