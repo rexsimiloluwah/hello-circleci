@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Similoluwa Okunowo / This Template Creates an S3 Bucket 
+
+Parameters:
+  MyBucketName: 
+    Type: String 
+    Description: Name of the S3 Bucket
+
+Resources:
+  WebsiteBucket: 
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: !Ref BucketName 
+      AccessControl: PublicRead 
+      WebsiteConfiguration: 
+        IndexDocument: index.html 
+        ErrorDocument: error.html
+        
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties: 
+      Bucket: !Ref WebsiteBucket 
+      PolicyDocument: 
+        Statement: 
+        - Sid: PublicReadForS3Bucket 
+          Effect: Allow 
+          Principal: '*'
+          Action: s3.GetObject 
+          Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]

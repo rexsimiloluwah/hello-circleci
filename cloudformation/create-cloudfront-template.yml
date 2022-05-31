@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Similoluwa Okunowo / This Template Creates a Cloudfront distribution to serve the S3 static website contents 
+
+Parameters: 
+  PipelineID: 
+    Type: String 
+    Description: Existing Bucket Name 
+
+Resources: 
+  CloudFrontOriginAccessIdentity: 
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties: 
+      CloudFrontOriginAccessIdentityConfig: 
+        Comment: Origin Access Identity for Serverless Static Website 
+
+  S3WebPageCDN: 
+    Type: AWS::CloudFront::Distribution 
+    Properties: 
+      DistributionConfig: 
+        Origins: 
+          - DomainName: !Sub "${PipelineID}.s3.amazonaws.com"
+            Id: webpage 
+            S3OriginConfig: 
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
+        Enabled: True 
+        DefaultRootObject: index.html 
+        DefaultCacheBehavior: 
+          ForwardedValues: 
+            QueryString: False 
+          TargetOriginId: webpage 
+          ViewerProtocolPolicy: allow-all
+
+Outputs: 
+  PipelineID: 
+    Description: reference to the pipeline ID 
+    Value: !Ref PipelineID 
+    Export: 
+      Name: PipelineID
+  
+  DomainName: 
+    Description: reference to the domain name for the cloudfront distribution 
+    Value: !GetAtt S3WebPageCDN.DomainName
