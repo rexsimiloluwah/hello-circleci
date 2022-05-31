@@ -31,11 +31,11 @@ Resources:
           ViewerProtocolPolicy: allow-all
 
 Outputs: 
-  PipelineID: 
-    Description: reference to the pipeline ID 
-    Value: !Ref PipelineID 
-    Export: 
-      Name: PipelineID
+  # PipelineID: 
+  #   Description: reference to the pipeline ID 
+  #   Value: !Ref PipelineID 
+  #   Export: 
+  #     Name: PipelineID
   
   DomainName: 
     Description: reference to the domain name for the cloudfront distribution 

@@ -152,7 +152,7 @@ jobs:
       - run: 
           name: Destroy the previous S3 bucket
           command: | 
-            export OldPipelineID=${cat ~/pipelineid.txt}
+            export OldPipelineID=$(cat ~/pipelineid.txt)
             aws s3 rm "s3://${OldPipelineID}" --recursive 
       - run: 
           name: Destroy the previous Cloudfront distro 
