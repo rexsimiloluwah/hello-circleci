@@ -52,13 +52,13 @@ jobs:
       - run: 
           name: smoke test on a dummy webpage 
           command: | 
-            URL = "https://github.com"   
+            URL="https://github.com"   
             if curl -s --head ${URL}
             then 
               return 0 
             else 
               return 1
-            fi
+              fi
       - run: 
           name: smoke test failure handler 
           command: | 
