@@ -1,6 +1,15 @@
 # Use version 2.1 of the CircleCI pipeline process engine
 version: 2.1
 
+commands:
+  # Reusable command for destroying cloudformation stack (ROllback example)
+  destroy_environment: 
+    steps: 
+      - run: 
+          name: Destroy environment 
+          when: on_fail 
+          command: |
+            aws cloudformation delete-stack --stack-name prod-stack-${CIRCLE_WORKFLOW_ID:0:7}
 jobs: 
   create_infrastructure: 
     docker: 
@@ -11,7 +20,10 @@ jobs:
       - run: 
           name: Create Cloudformation Stack 
           command: | 
-            aws cloudformation create-stack --stack-name infraCiCdStack-${CIRCLE_WORKFLOW_ID:0:5} --template-body file://cloudformation/ec2-template.yml --parameters file://cloudformation/ec2-parameters.json
+            aws cloudformation create-stack \
+            --stack-name prod-stack-${CIRCLE_WORKFLOW_ID:0:7} \
+            --template-body file://cloudformation/ec2-template.yml \
+            --parameters file://cloudformation/ec2-parameters.json
 
       # - run: 
       #     name: Fetch EC2 instance public IP address 
@@ -65,10 +77,23 @@ jobs:
             echo "Smoke Test Failed."
           when: on_fail
 
+  # Smoke test (for the Rollback example)
+  smoke_test_rollback: 
+    docker: 
+      - image: alpine:latest 
+    steps: 
+      - run: 
+          name: Simulate an error 
+          command: return 1
+      - destroy_environment
+
 workflows:
   my_workflow: 
     jobs: 
       # - create_infrastructure
       # - configure_infrastructure
-      - smoke_test
+      - create_infrastructure 
+      - smoke_test_rollback:
+          requires:
+            - create_infrastructure
 
