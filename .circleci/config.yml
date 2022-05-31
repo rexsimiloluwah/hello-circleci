@@ -43,9 +43,32 @@ jobs:
           command: | 
             ansible-playbook -i ./ansible/inventory.txt --key-file ~/.ssh/id_rsa_42660234cdb45d903ba21dd67809a584 ./ansible/main.yml 
 
+  # Smoke test 
+  smoke_test: 
+    docker: 
+      - image: alpine:latest 
+    steps: 
+      - run: apk add --update curl 
+      - run: 
+          name: smoke test on a dummy webpage 
+          command: | 
+            URL = "https://blog.udacity.com"
+            if curl -s --head ${URL}
+            then 
+              return 0 
+            else 
+              return 1
+            fi
+      - run: 
+          name: smoke test failure handler 
+          command: | 
+            echo "Smoke Test Failed."
+          when: on_fail
+
 workflows:
   my_workflow: 
     jobs: 
       # - create_infrastructure
-      - configure_infrastructure
+      # - configure_infrastructure
+      - smoke_test
 
