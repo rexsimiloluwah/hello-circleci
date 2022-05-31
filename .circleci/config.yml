@@ -82,9 +82,11 @@ jobs:
     docker: 
       - image: alpine:latest 
     steps: 
+      - checkout
       - run: 
           name: Simulate an error 
           command: return 1
+
       - destroy_environment
 
 workflows:
@@ -93,7 +95,5 @@ workflows:
       # - create_infrastructure
       # - configure_infrastructure
       - create_infrastructure 
-      - smoke_test_rollback:
-          requires:
-            - create_infrastructure
+      - smoke_test_rollback
 
