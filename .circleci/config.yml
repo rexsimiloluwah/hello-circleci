@@ -99,11 +99,10 @@ jobs:
           name: Deploy an S3 bucket - from the Cloudformation stack
           command: >
             aws cloudformation create-stack --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} --template-body file://cloudformation/create-s3-bucket-template.yml --parameters ParameterKey=MyBucketName,ParameterValue=mybucket-4227-${CIRCLE_WORKFLOW_ID:0:7}
-      - run: sleep 100
       - run: 
           name: Upload the contents of the `s3-files` folder 
           command: | 
-            aws s3 sync ./s3-files s3://mybucket-4227-${CIRCLECI_WORKFLOW_ID:0:7} --delete
+            aws s3 sync ./s3-files s3://mybucket-4227-${CIRCLE_WORKFLOW_ID:0:7} --delete
 
   # Fetch an save the PipelineID (bucket ID) from the last release (from cloudformation exports)
   get_last_deployment_id: 
