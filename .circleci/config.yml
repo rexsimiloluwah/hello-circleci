@@ -118,8 +118,8 @@ jobs:
       - run: 
           name: Fetch and save the old pipeline ID 
           command: | 
-            aws cloudformation list-exports \ 
-            --query "Exports[?Name==\`PipelineID\`].Value" \ 
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \ 
             --no-paginate --output text > ~/pipelineid.txt 
 
       - run: cat ~/pipelineid.txt
